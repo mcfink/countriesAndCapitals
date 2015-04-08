@@ -1,0 +1,155 @@
+
+.country-table-div{
+	position: block;
+	width: 1120px;
+	height: 700px;
+	overflow: scroll;
+	
+}
+
+.country-table{
+	border-collapse: collapse;
+	margin-top: 30px;
+}
+
+.country-table th{
+	padding: 4px;
+}
+
+.country-table td{
+	border: 1px solid black;
+	padding: 4px;
+	font-family: sans-serif;
+	text-align: center;
+}
+
+td.name, th.name{
+	width: 275px;
+}
+
+.country-table .code{
+	width: 60px;
+}
+
+.country-table .capital{
+	width: 230px;
+}
+
+.country-table .area{
+	width: 140px;
+}
+
+.country-table .population{
+	width: 130px;
+}
+.country-table .continent{
+	width: 200px;
+}
+
+sup{
+	position: relative;
+	top: -0.4em;
+	vertical-align: top;
+	font-size: 0.8em;
+}
+
+th{
+	font-family: Courier, sans-serif;
+	font-size: 1.2em;
+	line-height: 1.5em;
+	border: 1px solid black;
+}
+
+thead{
+	top: 100px;
+	display: table-header-group;
+	z-index: 0;
+	position: fixed;
+	background: rgba(255,255,255, 1);
+}
+
+tbody{
+	display: block;
+	width: 1120px;
+	height: 500px;
+	overflow: scroll;
+	padding-top: 140px;
+
+}
+
+tr.table-body:nth-child(even){
+	background-color: #DDD;
+}
+
+tr.table-body:nth-child(odd){
+	background-color: #9CF;
+}
+
+tr.table-body:hover{
+	background-color: #FDD;
+}
+
+.site-title{
+	font-family: Courier, serif;
+	color: #9CF;
+	background-color: navy;
+	border: 7px solid #9CF;
+	border-radius: 15px;
+	margin: 0px auto 20px auto;
+	width: 95%;
+	z-index: 1;
+	position: fixed;
+}
+
+.site-title h1{
+	margin: 20px 20px;
+	text-align: center;
+}
+
+.button-nav li{
+	list-style: none;
+}
+
+.button-nav button{
+	font-size: 1em;
+}
+
+.welcome{
+	top: 200px;
+	font-family: Courier, sans-serif;
+}
+
+.countries-button{
+	position: absolute;
+	top: 400px;
+}
+
+.center{
+	position: absolute;
+    left: 50%;
+    margin-right: -50%;
+    -webkit-transform: translate(-50%, 0);
+    transform: translate(-50%, 0); 
+}
+
+.test{
+	position: absolute;
+	top: 150px;
+	font-size: 30px;
+	color: #AAF;
+}
+
+p.neighbours{
+	position: absolute;
+	top: 200px;
+}
+
+img.map{
+	position: absolute;
+	top: 350px;
+}
+
+img.flag{
+	position: absolute;
+	top: 500px;
+}

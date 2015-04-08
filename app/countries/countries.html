@@ -1,0 +1,33 @@
+<div class="country-table-div">
+	<table class="country-table">
+		<thead>
+			<tr>
+				<th class="name">Country Name</th>
+				<th class="code">Code</th>
+				<th class="capital">Capital</th>
+				<th class="area">Area (km<sup>2</sup>)</th>
+				<th class="population">Population</th>
+				<th class="continent">Continent</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="table-body" ng-repeat="country in countryData" ng-click="showCountry(country.countryName, country.countryCode)">			
+				<td class="name">{{country.countryName}}</td>
+				<td class="code">{{country.countryCode}}</td>
+				<td class="capital">{{country.capital}}</td>
+				<td class="area">{{country.areaInSqKm | number}}</td>
+				<td class="population">{{country.population | number}}</td>
+				<td class="continent">{{country.continent | continent}}</td>
+			</tr>
+
+		</tbody>
+	</table>
+</div>
+
+<nav class="button-nav center">
+	<ul>
+		<li>
+			<button ng-click="goHome()">Home</button>
+		</li>
+	</ul>
+</nav>

@@ -1,0 +1,12 @@
+<h1 class="test"> {{countryName}} {{population | number}} {{area | number}} {{capital}} {{capitalPopulation | number}}</h1>
+
+
+
+<p class="neighbours">Neighbors of {{countryName}}: 
+	<span ng-if="neighbours" ng-repeat="neighbour in neighbours" ng-click="showCountry(neighbour.countryName, neighbour.countryCode)">{{neighbour.countryName}}{{$last ? '' : ($index==neighbours.length-2) ? ", and " : ',&nbsp;'}} </span>
+
+	<span ng-if="neighbours.length == 0">None</span>
+</p>
+
+<img class="details map" src="http://www.geonames.org/img/country/250/{{uppercaseCode}}.png" />
+<img class="details flag" src="http://www.geonames.org/flags/x/{{lowercaseCode}}.gif" />
