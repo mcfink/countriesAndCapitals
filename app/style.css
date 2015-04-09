@@ -1,3 +1,15 @@
+.welcome-title{
+	color: navy;
+	text-align: center;
+	margin: 0 30% 15px;
+}
+
+.welcome-text{
+	color: navy;
+	text-align: center;
+	margin: 0 30%;
+	line-height: 1.3em;
+}
 
 .country-table-div{
 	position: block;
@@ -62,6 +74,7 @@ th{
 
 thead{
 	top: 100px;
+	min-width: 1100px;
 	display: table-header-group;
 	z-index: 0;
 	position: fixed;
@@ -69,11 +82,15 @@ thead{
 }
 
 tbody{
+	position: absolute;
+	top: 146px;
 	display: block;
 	width: 1120px;
 	height: 500px;
 	overflow: scroll;
-	padding-top: 140px;
+	padding: 0px;
+
+	border: 2px solid black;
 
 }
 
@@ -119,6 +136,7 @@ tr.table-body:hover{
 	font-family: Courier, sans-serif;
 }
 
+
 .countries-button{
 	position: absolute;
 	top: 400px;
@@ -139,17 +157,109 @@ tr.table-body:hover{
 	color: #AAF;
 }
 
-p.neighbours{
-	position: absolute;
-	top: 200px;
+.info-panel{
+	position:absolute;
+	top: 100px;
+	margin: 0 10%;
+	border: 7px solid #9CF;
+	border-radius: 15px;
+	width: 80%;
+	background-color: #CCC;
+}
+
+h1.country-name{
+	font-family: Courier, serif;
+	color: navy;
+	padding: 20px;
+}
+
+.neighbour-name{
+	color: #090;
+}
+
+.info-panel p{
+	font-family: sans-serif;
+	color: navy;
+	padding: 6px 20px;
+	line-height: 1.3em;
 }
 
 img.map{
-	position: absolute;
-	top: 350px;
+	display: block;
+	max-width: 60%;
+	max-height: 800px;
+	text-align: center;
+	padding: 5px;
+	background-color: #FFF;
+	border: 2px solid black;
+	margin: 10px auto;
+
 }
 
 img.flag{
-	position: absolute;
-	top: 500px;
+	float: right;
+	width: 200px;
+	border: 2px solid black;
+	margin: 20px;
 }
+
+.nav-buttons button{
+	font-size: 1em;
+	margin: 20px;
+	padding: 8px;
+}
+
+.nav-buttons{
+	text-align: center;
+}
+
+.animate-view.ng-enter, .animate-view.ng-leave{
+	transition: 0.6s linear all;
+}
+
+.animate-view.ng-enter{
+	position: absolute;
+	left: -1500px;
+	width: 100%;
+	opacity: 0;
+}
+
+.animate-view.ng-enter.ng-enter-active{
+	position: absolute;
+	left: 0px;
+	width: 100%;
+	opacity: 1;
+}
+
+.animate-view.ng-leave{
+	position: absolute;
+	left: 0px;
+	width: 100%;
+	opacity: 1;
+}
+
+.animate-view.ng-leave.ng-leave-active{
+	position: absolute;
+	left: 1500px;
+	width: 100%;
+	opacity: 0;
+}
+
+.map{
+	opacity:0;
+}
+.notLoading.map{
+	opacity: 1;
+	transition: 1s linear all;
+}
+
+
+.flag{
+	opacity: 0;
+}
+
+.notLoading.flag{
+	opacity: 1;
+	transition: 1s linear all;
+}
+

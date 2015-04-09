@@ -1,12 +1,46 @@
 angular.module('thinkfulCountriesAndCaps', ['ngRoute', 'ngAnimate'])
 	
-	.factory('GeneralCountryDataService', function($http){
-		return function() {
-			return $http({
+	.run(function($rootScope, $location, $timeout){
+		$rootScope.$on('$routeChangeStart', function(){
+			$rootScope.isLoading = true;
+		});
+		$rootScope.$on('$routeChangeSuccess', function(){
+			$timeout(function() {
+				$rootScope.isLoading = false;
+			}, 1000);
+		});
+	})
+
+	.factory('GeneralCountryDataService', function($http, $q){
+		var countryData = [];
+
+		function LoadCountriesData(){
+			var defer = $q.defer();
+			$http({
 				url: "http://api.geonames.org/countryInfoJSON?username=mcfink",
 				method: 'JSONP',
 				params: {callback: 'JSON_CALLBACK'}
+			}).success(function(result){
+				countryData = result.geonames;
+				defer.resolve();
 			});
+		return defer.promise;
+		}
+
+		
+		return{
+			load: LoadCountriesData,
+			list: function(){
+				return countryData;
+			},
+			findCountryCode: 
+				function(countryName){
+				for (var i = 0; i < countryData.length; i++){
+					if(countryData[i].countryName == countryName){
+						return countryData[i].countryCode;
+					};
+				};
+			}
 		}
 	})
 
@@ -69,66 +103,45 @@ angular.module('thinkfulCountriesAndCaps', ['ngRoute', 'ngAnimate'])
 
 	.controller('countriesController', ['$location', '$scope', 'GeneralCountryDataService', 'ActiveCodeService', 'AllCountryCodeService', function($location, $scope, GeneralCountryDataService, ActiveCodeService, AllCountryCodeService){
 		var countryData = [];
-		GeneralCountryDataService().success(function(result){
-			$scope.countryData = result.geonames;
-			AllCountryCodeService.data = result.geonames;
+		
+		$scope.countryData = GeneralCountryDataService.list();
+		console.log($scope.countryData);
 			
-		});
 
 		$scope.goHome = function(){
 			$location.path( '/' );
 		}
 
-		$scope.showCountry = function(country, countryCode){
-			ActiveCodeService.data.countryCode = countryCode;
+		$scope.showCountry = function(country){
 			$location.path( '/countries/' + country + "/capital");
 		}
 	}])
 
-	.controller('detailController', ['$q', '$scope', '$route', 'DetailCountryService', 'ActiveCodeService', 'CapitalInfoService', 'NeighborsService', 'AllCountryCodeService', 'GeneralCountryDataService', function($q, $scope, $route, DetailCountryService, ActiveCodeService, CapitalInfoService, NeighborsService, AllCountryCodeService, GeneralCountryDataService) {
+	.controller('detailController', ['$q', '$scope', '$route', '$location', 'DetailCountryService', 'ActiveCodeService', 'CapitalInfoService', 'NeighborsService', 'AllCountryCodeService', 'GeneralCountryDataService', function($q, $scope, $route, $location, DetailCountryService, ActiveCodeService, CapitalInfoService, NeighborsService, AllCountryCodeService, GeneralCountryDataService) {
 
-		if(ActiveCodeService.data.countryCode == ""){
-				GeneralCountryDataService().success(function(result){
-				$scope.countryData = result.geonames;
-				AllCountryCodeService.data = result.geonames;
-				console.log("GeneralCountryDataService was run successfully");
-				
-				findCode();
-			}) 		
-		} else {
-			findCode();
-		}
 
 		$scope.detailCountry = $route.current.params.country;
 		console.log($scope.detailCountry);
+		$scope.countryCode = GeneralCountryDataService.findCountryCode($scope.detailCountry);
+		console.log($scope.countryCode);
+		
 
 		
-		function findCode(){
-			for (var i=0; i<AllCountryCodeService.data.length; i++){
-				if (AllCountryCodeService.data[i].countryName == $scope.detailCountry){
-					ActiveCodeService.data.countryCode = AllCountryCodeService.data[i].countryCode;
-				}
-			};
-			console.log('country code found: ' + ActiveCodeService.data.countryCode);	
-		}
-
-		
-		DetailCountryService(ActiveCodeService.data.countryCode).success(function(result){
+		DetailCountryService($scope.countryCode).success(function(result){
 			$scope.detailData = result;
 			$scope.countryName = $scope.detailData.geonames[0].countryName;
 			$scope.population = $scope.detailData.geonames[0].population;
 			$scope.area = $scope.detailData.geonames[0].areaInSqKm;
 			$scope.capital = $scope.detailData.geonames[0].capital;
-			$scope.uppercaseCode = angular.uppercase(ActiveCodeService.data.countryCode);
-			$scope.lowercaseCode = angular.lowercase(ActiveCodeService.data.countryCode);
+			$scope.uppercaseCode = angular.uppercase($scope.countryCode);
+			$scope.lowercaseCode = angular.lowercase($scope.countryCode);
 
-			CapitalInfoService($scope.capital, ActiveCodeService.data.countryCode).success(function(result){
+			CapitalInfoService($scope.capital, $scope.countryCode).success(function(result){
 				$scope.capitalPopulation = result.geonames[0].population;
 			})
 
-			NeighborsService(ActiveCodeService.data.countryCode).success(function(result){
+			NeighborsService($scope.countryCode).success(function(result){
 				$scope.neighbours = result.geonames;
-				console.log(result);
 			})
 		
 
@@ -137,7 +150,13 @@ angular.module('thinkfulCountriesAndCaps', ['ngRoute', 'ngAnimate'])
 			console.log("capital request failed");
 		})
 		
-		
+		$scope.goHome = function(){
+			$location.path( '/' );
+		}
+
+		$scope.allCountries = function(){
+			$location.path( '/countries');
+		}
 
 		
 	}])
@@ -178,10 +197,26 @@ angular.module('thinkfulCountriesAndCaps', ['ngRoute', 'ngAnimate'])
 		})
 		.when('/countries', {
 			templateUrl : 'countries/countries.html',
-			controller : 'countriesController'
+			controller : 'countriesController',
+			resolve: {
+					load:function(GeneralCountryDataService){
+						if(GeneralCountryDataService.list().length < 1){
+							console.log('reload on country data required');
+							return GeneralCountryDataService.load();
+					}
+				}
+			}
 		})
 		.when('/countries/:country/capital', {
 			templateUrl : 'countries/detail.html',
-			controller : 'detailController'
+			controller : 'detailController',
+			resolve: {
+					load:function(GeneralCountryDataService){
+						if(GeneralCountryDataService.list().length < 1){
+							console.log('reload on country data required');
+							return GeneralCountryDataService.load();
+					}
+				}
+			}
 		})
 	}]);

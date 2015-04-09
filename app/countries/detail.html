@@ -1,12 +1,23 @@
-<h1 class="test"> {{countryName}} {{population | number}} {{area | number}} {{capital}} {{capitalPopulation | number}}</h1>
+<div class="info-panel">
 
 
 
-<p class="neighbours">Neighbors of {{countryName}}: 
-	<span ng-if="neighbours" ng-repeat="neighbour in neighbours" ng-click="showCountry(neighbour.countryName, neighbour.countryCode)">{{neighbour.countryName}}{{$last ? '' : ($index==neighbours.length-2) ? ", and " : ',&nbsp;'}} </span>
+	<img ng-class="{notLoading: !isLoading}" class="details flag" src="http://www.geonames.org/flags/x/{{lowercaseCode}}.gif" />
+	<h1 class="country-name">{{countryName}}</h1>
+	<p class="population">Population: {{population | number}}</p>
+	<p class="capital">Capital: {{capital}} (pop. {{capitalPopulation | number}})
+	<p class="area">Area: {{area|number}} square kilometers</p>
+	<p class="neighbours">Neighbors of {{countryName}}: 
+		<span ng-if="neighbours" ng-repeat="neighbour in neighbours" ng-click="showCountry(neighbour.countryName, neighbour.countryCode)"><span class="neighbour-name">{{neighbour.countryName}}</span>{{$last ? '' : ', '}} </span>
 
-	<span ng-if="neighbours.length == 0">None</span>
-</p>
+		<span ng-if="neighbours.length == 0">None</span>
+	</p>
 
-<img class="details map" src="http://www.geonames.org/img/country/250/{{uppercaseCode}}.png" />
-<img class="details flag" src="http://www.geonames.org/flags/x/{{lowercaseCode}}.gif" />
+	<img  ng-class="{notLoading: !isLoading}" class="details map" src="http://www.geonames.org/img/country/250/{{uppercaseCode}}.png" />
+
+	<div class="nav-buttons">
+		<button ng-click="goHome()">Home</button>
+		<button ng-click="allCountries()">Browse Countries</button>
+	</div>	
+
+</div>
