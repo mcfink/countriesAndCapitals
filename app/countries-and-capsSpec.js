@@ -21,7 +21,7 @@ describe("detail controller", function(){
 	it("should load a country name", function(){
 		module(function($provide){
 			$provide.value('GeneralCountryDataService', function(value){
-				return "monkey";
+				return "test line";
 			});
 		});
 		inject(function())
